@@ -1,9 +1,12 @@
 package dev.viniciusjmr.servicerequest.api.exceptionhandler;
 
 import dev.viniciusjmr.servicerequest.api.model.exception.GlobalExceptionModel;
+import dev.viniciusjmr.servicerequest.domain.exception.ResourceAlreadyExistsException;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
@@ -34,6 +37,21 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
         return super.handleExceptionInternal(ex, exceptionModel, headers, statusCode, request);
     }
 
+    @ExceptionHandler(ResourceAlreadyExistsException.class)
+    public ResponseEntity<Object> handleResourceAlreadyExistsException(
+            ResourceAlreadyExistsException ex,
+            WebRequest request
+    ) {
+        var code = HttpStatus.CONFLICT;
+
+        var body = new GlobalExceptionModel(
+                ex.getMessage(),
+                code.value(),
+                Instant.now()
+        );
+
+        return handleExceptionInternal(ex, body, new HttpHeaders(), code, request);
+    }
 
 
 }
