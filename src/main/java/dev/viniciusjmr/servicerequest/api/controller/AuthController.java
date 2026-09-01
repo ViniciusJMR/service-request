@@ -1,7 +1,10 @@
 package dev.viniciusjmr.servicerequest.api.controller;
 
+import dev.viniciusjmr.servicerequest.api.model.login.LoginRequest;
+import dev.viniciusjmr.servicerequest.api.model.login.LoginResponse;
 import dev.viniciusjmr.servicerequest.api.model.user.RegisterClientRequest;
 import dev.viniciusjmr.servicerequest.api.model.user.RegisterClientResponse;
+import dev.viniciusjmr.servicerequest.auth.service.AuthService;
 import dev.viniciusjmr.servicerequest.domain.service.UserService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -16,9 +19,11 @@ import java.net.URI;
 public class AuthController {
 
     private final UserService userService;
+    private final AuthService authService;
 
-    public AuthController(UserService userService) {
+    public AuthController(UserService userService, AuthService authService) {
         this.userService = userService;
+        this.authService = authService;
     }
 
     @PostMapping("/register")
@@ -28,5 +33,14 @@ public class AuthController {
 
         var uri = URI.create("/client/" + user.getId());
         return ResponseEntity.created(uri).body(response);
+    }
+
+    @PostMapping("/login")
+    public ResponseEntity<LoginResponse> login(@RequestBody LoginRequest body) {
+        var token = authService.login(body.email(), body.password());
+
+        var response = new LoginResponse(token);
+
+        return ResponseEntity.ok(response);
     }
 }
