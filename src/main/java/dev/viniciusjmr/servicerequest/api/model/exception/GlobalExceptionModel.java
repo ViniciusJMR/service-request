@@ -10,5 +10,6 @@ public record GlobalExceptionModel(
         Integer status,
 
         @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss", timezone = "GMT-3")
-        Instant timestamp
+        Instant timestamp,
+        Object details
 ) { }

@@ -1,7 +1,10 @@
 package dev.viniciusjmr.servicerequest.api.exceptionhandler;
 
 import dev.viniciusjmr.servicerequest.api.model.exception.GlobalExceptionModel;
+import dev.viniciusjmr.servicerequest.domain.exception.FieldException;
+import dev.viniciusjmr.servicerequest.domain.exception.ForbidenOperationException;
 import dev.viniciusjmr.servicerequest.domain.exception.ResourceAlreadyExistsException;
+import dev.viniciusjmr.servicerequest.domain.exception.ResourceNotFoundException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
@@ -31,7 +34,8 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
         GlobalExceptionModel exceptionModel = new GlobalExceptionModel(
                 ex.getMessage() != null ? ex.getMessage() : "Erro inesperado",
                 statusCode.value(),
-                Instant.now()
+                Instant.now(),
+                null
         );
 
         return super.handleExceptionInternal(ex, exceptionModel, headers, statusCode, request);
@@ -47,11 +51,62 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
         var body = new GlobalExceptionModel(
                 ex.getMessage(),
                 code.value(),
-                Instant.now()
+                Instant.now(),
+                null
         );
 
         return handleExceptionInternal(ex, body, new HttpHeaders(), code, request);
     }
 
+    @ExceptionHandler(ResourceNotFoundException.class)
+    public ResponseEntity<Object> handleFieldException(
+            ResourceNotFoundException ex,
+            WebRequest request
+    ) {
+        var code = HttpStatus.NOT_FOUND;
+
+        var body = new GlobalExceptionModel(
+                ex.getMessage(),
+                code.value(),
+                Instant.now(),
+                null
+        );
+
+        return handleExceptionInternal(ex, body, new HttpHeaders(), code, request);
+    }
+
+    @ExceptionHandler(ForbidenOperationException.class)
+    public ResponseEntity<Object> handleFieldException(
+            ForbidenOperationException ex,
+            WebRequest request
+    ) {
+        var code = HttpStatus.FORBIDDEN;
+
+        var body = new GlobalExceptionModel(
+                ex.getMessage(),
+                code.value(),
+                Instant.now(),
+                null
+        );
+
+        return handleExceptionInternal(ex, body, new HttpHeaders(), code, request);
+    }
+
+    @ExceptionHandler(FieldException.class)
+    public ResponseEntity<Object> handleFieldException(
+            FieldException ex,
+            WebRequest request
+    ) {
+        var code = HttpStatus.BAD_REQUEST;
+
+        var body = new GlobalExceptionModel(
+                ex.getMessage(),
+                code.value(),
+                Instant.now(),
+                ex.getFields()
+        );
+
+        return handleExceptionInternal(ex, body, new HttpHeaders(), code, request);
+    }
 
 }

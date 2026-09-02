@@ -6,6 +6,7 @@ import dev.viniciusjmr.servicerequest.api.model.user.RegisterClientRequest;
 import dev.viniciusjmr.servicerequest.api.model.user.RegisterClientResponse;
 import dev.viniciusjmr.servicerequest.auth.service.AuthService;
 import dev.viniciusjmr.servicerequest.domain.service.UserService;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -31,8 +32,7 @@ public class AuthController {
         var user = userService.createClient(client.name(), client.email(), client.password());
         var response = RegisterClientResponse.from(user);
 
-        var uri = URI.create("/client/" + user.getId());
-        return ResponseEntity.created(uri).body(response);
+        return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
     @PostMapping("/login")
