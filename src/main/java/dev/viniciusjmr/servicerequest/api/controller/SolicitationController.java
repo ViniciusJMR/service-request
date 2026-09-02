@@ -3,7 +3,9 @@ package dev.viniciusjmr.servicerequest.api.controller;
 import dev.viniciusjmr.servicerequest.api.model.solicitations.CreateSolicitationResponse;
 import dev.viniciusjmr.servicerequest.api.model.solicitations.Step1Request;
 import dev.viniciusjmr.servicerequest.api.model.solicitations.Step1Response;
+import dev.viniciusjmr.servicerequest.domain.model.Solicitation;
 import dev.viniciusjmr.servicerequest.domain.service.SolicitationService;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -36,7 +38,7 @@ public class SolicitationController {
     public ResponseEntity<Step1Response> patchStep1(
             @AuthenticationPrincipal Jwt jwt,
             @PathVariable UUID id,
-            @RequestBody Step1Request body
+            @RequestBody @Valid Step1Request body
     ) {
         var userId = UUID.fromString(jwt.getSubject());
         var solicitation = solicitationService.saveStep1(
@@ -44,7 +46,7 @@ public class SolicitationController {
                 id,
                 body.title(),
                 body.description(),
-                body.serviceType()
+                Solicitation.ServiceType.valueOf(body.serviceType())
         );
 
         return ResponseEntity.ok(Step1Response.from(solicitation));
@@ -54,7 +56,7 @@ public class SolicitationController {
     public ResponseEntity<Step1Response> completeStep1(
             @AuthenticationPrincipal Jwt jwt,
             @PathVariable UUID id,
-            @RequestBody Step1Request body
+            @RequestBody @Valid Step1Request body
     ) {
         var userId = UUID.fromString(jwt.getSubject());
         var solicitation = solicitationService.completeStep1(
@@ -62,7 +64,7 @@ public class SolicitationController {
                 id,
                 body.title(),
                 body.description(),
-                body.serviceType()
+                Solicitation.ServiceType.valueOf(body.serviceType())
         );
 
         return ResponseEntity.ok(Step1Response.from(solicitation));

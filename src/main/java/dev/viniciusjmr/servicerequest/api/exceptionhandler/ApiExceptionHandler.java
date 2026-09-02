@@ -9,6 +9,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
@@ -109,4 +110,34 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
         return handleExceptionInternal(ex, body, new HttpHeaders(), code, request);
     }
 
+
+    @Override
+    protected ResponseEntity<Object> handleMethodArgumentNotValid(
+            MethodArgumentNotValidException ex,
+            HttpHeaders headers,
+            HttpStatusCode statusCode,
+            WebRequest request
+    ) {
+        var errors = ex.getBindingResult()
+                .getFieldErrors()
+                .stream()
+                .map(error ->
+                        new FieldException.Field(
+                                error.getField(),
+                                error.getDefaultMessage()
+                        )
+                )
+                .toList();
+
+        var code = HttpStatus.BAD_REQUEST;
+
+        var body = new GlobalExceptionModel(
+                ex.getMessage(),
+                code.value(),
+                Instant.now(),
+                errors
+        );
+
+        return handleExceptionInternal(ex, body, headers, code, request);
+    }
 }

@@ -1,10 +1,15 @@
 package dev.viniciusjmr.servicerequest.api.model.solicitations;
 
-import dev.viniciusjmr.servicerequest.domain.model.Solicitation;
+import jakarta.validation.constraints.Pattern;
 
 public record Step1Request(
         String title,
         String description,
-        Solicitation.ServiceType serviceType
+
+        @Pattern(
+                regexp = "INSTALLATION|MAINTENANCE|INSPECTION",
+                message = "Invalid service type. Valid types: INSTALLATION, MAINTENANCE, INSPECTION"
+        )
+        String serviceType
 ) {
 }

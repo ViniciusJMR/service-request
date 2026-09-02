@@ -10,7 +10,7 @@ import java.util.Objects;
 import java.util.UUID;
 
 @Entity
-@Table(name = "requests")
+@Table(name = "solicitations")
 @EntityListeners(AuditingEntityListener.class)
 public class Solicitation {
     @Id
@@ -35,7 +35,7 @@ public class Solicitation {
     @Column(length = 80)
     private String title;
 
-    @Column(columnDefinition = "TEXT", length = 1000)
+    @Column(length = 1000)
     private String description;
 
 
@@ -56,7 +56,7 @@ public class Solicitation {
 
     private Instant analyzedAt;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "analyzed_by")
     private User analyzedBy;
 

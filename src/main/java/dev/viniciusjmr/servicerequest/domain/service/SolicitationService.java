@@ -51,9 +51,14 @@ public class SolicitationService {
         validateIfSolicitationIsFromClient(solicitation, userId);
         validateIfSolicitationCanBeEdited(solicitation);
 
-        solicitation.setTitle(title.trim());
-        solicitation.setDescription(description.trim());
-        solicitation.setType(type);
+        if (title != null)
+            solicitation.setTitle(title.trim());
+
+        if (description != null)
+            solicitation.setDescription(description.trim());
+
+        if (type != null)
+            solicitation.setType(type);
 
         return solicitationRepository.save(solicitation);
     }
@@ -70,7 +75,6 @@ public class SolicitationService {
 
         validateIfSolicitationIsFromClient(solicitation, userId);
         validateIfSolicitationCanBeEdited(solicitation);
-
 
         solicitation.setTitle(title.trim());
         solicitation.setDescription(description.trim());
