@@ -39,12 +39,19 @@ public class SolicitationController {
             @RequestBody @Valid Step1Request body
     ) {
         var userId = UUID.fromString(jwt.getSubject());
+
+        Solicitation.ServiceType type = null;
+
+        if (body.serviceType() != null) {
+            type = Solicitation.ServiceType.valueOf(body.serviceType());
+        }
+
         var solicitation = solicitationService.saveStep1(
                 userId,
                 id,
                 body.title(),
                 body.description(),
-                Solicitation.ServiceType.valueOf(body.serviceType()),
+                type,
                 false
         );
 
@@ -58,13 +65,20 @@ public class SolicitationController {
             @RequestBody @Valid Step1Request body
     ) {
         var userId = UUID.fromString(jwt.getSubject());
+
+        Solicitation.ServiceType type = null;
+
+        if (body.serviceType() != null) {
+            type = Solicitation.ServiceType.valueOf(body.serviceType());
+        }
+
         var solicitation = solicitationService.saveStep1(
                 userId,
                 id,
                 body.title(),
                 body.description(),
-                Solicitation.ServiceType.valueOf(body.serviceType()),
-                true
+                type,
+                false
         );
 
         return ResponseEntity.ok(Step1Response.from(solicitation));
@@ -115,14 +129,20 @@ public class SolicitationController {
             @RequestBody @Valid Step3Request body
     ) {
         var userId = UUID.fromString(jwt.getSubject());
+        Solicitation.Priority priority = null;
+
+        if (body.priority() != null) {
+            priority = Solicitation.Priority.valueOf(body.priority());
+        }
+
         var solicitation = solicitationService.saveStep3(
                 userId,
                 id,
-                Solicitation.Priority.valueOf(body.priority()),
+                priority,
                 body.preferredDate(),
                 body.estimatedValue(),
                 body.termsAccepted(),
-                false
+                true
         );
 
         return ResponseEntity.ok(Step3Response.from(solicitation));
@@ -135,10 +155,16 @@ public class SolicitationController {
             @RequestBody @Valid Step3Request body
     ) {
         var userId = UUID.fromString(jwt.getSubject());
+        Solicitation.Priority priority = null;
+
+        if (body.priority() != null) {
+                priority = Solicitation.Priority.valueOf(body.priority());
+        }
+
         var solicitation = solicitationService.saveStep3(
                 userId,
                 id,
-                Solicitation.Priority.valueOf(body.priority()),
+                priority,
                 body.preferredDate(),
                 body.estimatedValue(),
                 body.termsAccepted(),
