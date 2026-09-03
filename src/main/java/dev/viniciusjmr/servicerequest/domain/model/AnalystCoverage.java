@@ -27,6 +27,8 @@ public class AnalystCoverage {
     )
     private Set<State> states;
 
+    public AnalystCoverage() {}
+
     public AnalystCoverage(User user, Set<State> states) {
         this.user = user;
         this.states = states;

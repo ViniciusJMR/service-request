@@ -7,6 +7,8 @@ import org.springframework.data.elasticsearch.annotations.DateFormat;
 import org.springframework.data.elasticsearch.annotations.Document;
 import org.springframework.data.elasticsearch.annotations.Field;
 import org.springframework.data.elasticsearch.annotations.FieldType;
+import org.springframework.data.elasticsearch.annotations.InnerField;
+import org.springframework.data.elasticsearch.annotations.MultiField;
 
 import java.time.Instant;
 import java.util.UUID;
@@ -26,10 +28,20 @@ public class SolicitationDocument {
     @Field(type = FieldType.Keyword)
     private Solicitation.ServiceType serviceType;
 
-    @Field(type = FieldType.Text)
+    @MultiField(
+            mainField = @Field(type = FieldType.Text),
+            otherFields = {
+                    @InnerField(suffix = "keyword", type = FieldType.Keyword, ignoreAbove = 1024)
+            }
+    )
     private String title;
 
-    @Field(type = FieldType.Text)
+    @MultiField(
+            mainField = @Field(type = FieldType.Text),
+            otherFields = {
+                    @InnerField(suffix = "keyword", type = FieldType.Keyword, ignoreAbove = 4096)
+            }
+    )
     private String description;
 
     @Field(type = FieldType.Keyword)
