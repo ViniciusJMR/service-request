@@ -29,7 +29,7 @@ docker compose up --build
 ```
 
 ###  Endpoints
-A Collection de endpoints para se usar no Postman pode ser encontrado na pasta [docs](./docs/Service Request.postman_collection.json)
+A Collection de endpoints para se usar no Postman pode ser encontrado na pasta [docs](docs/)
 
 ### Migrações
 As migrações estão ocorrendo pelo flyway e estão configuradas para rodar assim que assim que a aplicação for iniciada
