@@ -5,6 +5,7 @@ import dev.viniciusjmr.servicerequest.api.model.solicitations.SolicitationDecide
 import dev.viniciusjmr.servicerequest.api.model.solicitations.SolicitationDecideResponse;
 import dev.viniciusjmr.servicerequest.domain.model.Solicitation;
 import dev.viniciusjmr.servicerequest.domain.service.AnalystService;
+import dev.viniciusjmr.servicerequest.infrastructure.audit.Audit;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -61,6 +62,7 @@ public class AnalystController {
         return ResponseEntity.status(HttpStatus.OK).build();
     }
 
+    @Audit(action = "SOLICITATION_DECIDE")
     @PostMapping("/solicitations/{id}/decide")
     public ResponseEntity<SolicitationDecideResponse> decideSolicitation(
             @AuthenticationPrincipal Jwt jwt,
