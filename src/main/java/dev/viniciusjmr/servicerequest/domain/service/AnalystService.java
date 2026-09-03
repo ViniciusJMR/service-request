@@ -7,6 +7,7 @@ import dev.viniciusjmr.servicerequest.domain.model.Solicitation;
 import dev.viniciusjmr.servicerequest.domain.repository.AnalystCoverageRepository;
 import dev.viniciusjmr.servicerequest.domain.repository.SolicitationRepository;
 import dev.viniciusjmr.servicerequest.domain.repository.UserRepository;
+import dev.viniciusjmr.servicerequest.infrastructure.indexing.IndexSolicitation;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
@@ -57,6 +58,8 @@ public class AnalystService {
     }
 
 
+
+    @IndexSolicitation
     public Solicitation decideSolicitation(
             UUID analystId,
             Role role,

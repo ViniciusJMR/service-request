@@ -11,6 +11,7 @@ import dev.viniciusjmr.servicerequest.domain.service.cep.CEPModel;
 import dev.viniciusjmr.servicerequest.domain.service.cep.SearchCep;
 import dev.viniciusjmr.servicerequest.domain.service.validation.GeneralValidator;
 import dev.viniciusjmr.servicerequest.domain.service.validation.ValidationGroups;
+import dev.viniciusjmr.servicerequest.infrastructure.indexing.IndexSolicitation;
 import jakarta.validation.Validator;
 import org.springframework.stereotype.Service;
 
@@ -53,6 +54,7 @@ public class SolicitationService {
         return solicitationRepository.save(solicitation);
     }
 
+    @IndexSolicitation
     public Solicitation saveStep1(
             UUID userId,
             UUID solicitationId,
@@ -88,6 +90,7 @@ public class SolicitationService {
         return solicitationRepository.save(solicitation);
     }
 
+    @IndexSolicitation
     public Solicitation saveStep2(
             UUID userId,
             UUID solicitationId,
@@ -115,6 +118,7 @@ public class SolicitationService {
         return solicitationRepository.save(solicitation);
     }
 
+    @IndexSolicitation
     public Solicitation saveStep3(
             UUID userId,
             UUID solicitationId,
@@ -154,6 +158,7 @@ public class SolicitationService {
         return solicitationRepository.save(solicitation);
     }
 
+    @IndexSolicitation
     public Solicitation submit(
             UUID userId,
             UUID solicitationId

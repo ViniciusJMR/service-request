@@ -4,6 +4,7 @@ import dev.viniciusjmr.servicerequest.api.model.solicitations.*;
 import dev.viniciusjmr.servicerequest.domain.model.Solicitation;
 import dev.viniciusjmr.servicerequest.domain.service.SolicitationService;
 import dev.viniciusjmr.servicerequest.infrastructure.audit.Audit;
+import dev.viniciusjmr.servicerequest.infrastructure.indexing.IndexSolicitation;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

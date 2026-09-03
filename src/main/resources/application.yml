@@ -3,6 +3,8 @@ spring:
     name: ServiceRequest
   profiles:
     active: ${SPRING_PROFILES_ACTIVE:prod}
+  elasticsearch:
+    uris: ${ELASTIC_SEARCH_URI}
 
 server:
   servlet:
