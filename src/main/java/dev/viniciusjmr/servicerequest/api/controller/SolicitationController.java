@@ -142,7 +142,7 @@ public class SolicitationController {
                 body.preferredDate(),
                 body.estimatedValue(),
                 body.termsAccepted(),
-                true
+                false
         );
 
         return ResponseEntity.ok(Step3Response.from(solicitation));
@@ -172,5 +172,17 @@ public class SolicitationController {
         );
 
         return ResponseEntity.ok(Step3Response.from(solicitation));
+    }
+
+    @PostMapping("/{id}/submit")
+    public ResponseEntity<SubmitResponse> submit(
+            @AuthenticationPrincipal Jwt jwt,
+            @PathVariable UUID id
+    ) {
+        var userId = UUID.fromString(jwt.getSubject());
+
+        var solicitation = solicitationService.submit(userId, id);
+
+        return ResponseEntity.ok().body(SubmitResponse.from(solicitation));
     }
 }

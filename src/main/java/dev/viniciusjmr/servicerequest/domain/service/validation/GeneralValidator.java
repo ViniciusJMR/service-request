@@ -16,7 +16,7 @@ public class GeneralValidator {
         }
 
         if (!solicitation.getStatus().equals(Solicitation.Status.DRAFT)) {
-            throw new NotEditableException("Solicitation can only be edited in Draft");
+            throw new NotEditableException("Solicitation can only be edited or submitted in Draft");
         }
 
         if(solicitation.getCurrentStep() < currentStep) {

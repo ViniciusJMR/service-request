@@ -135,19 +135,36 @@ public class SolicitationService {
 
         if (validate){
             validate(solicitation, ValidationGroups.OnCompleteStep3.class);
+
+            if (solicitation.getPriority() == Solicitation.Priority.HIGH && solicitation.getEstimatedValue() < 100) {
+                throw new FieldException(
+                        "Invalid Fields",
+                        List.of(
+                                new FieldException.Field(
+                                        "estimatedValue",
+                                        "For High priorities estimated value can not be less then 100"
+                                )
+                        )
+                );
+            }
         }
 
-        if (solicitation.getPriority() == Solicitation.Priority.HIGH && solicitation.getEstimatedValue() < 100) {
-            throw new FieldException(
-                    "Invalid Fields",
-                    List.of(
-                            new FieldException.Field(
-                            "estimatedValue",
-                            "For High priorities estimated value can not be less then 100"
-                            )
-                    )
-            );
-        }
+
+        return solicitationRepository.save(solicitation);
+    }
+
+    public Solicitation submit(
+            UUID userId,
+            UUID solicitationId
+    ) {
+        var solicitation = solicitationRepository.findById(solicitationId)
+                .orElseThrow(() -> new ResourceNotFoundException("Solicitation not found"));
+
+        generalValidator.validate(solicitation, userId, 3);
+
+        validate(solicitation, ValidationGroups.OnSubmit.class);
+
+        solicitation.setStatus(Solicitation.Status.SUBMITTED);
 
         return solicitationRepository.save(solicitation);
     }
