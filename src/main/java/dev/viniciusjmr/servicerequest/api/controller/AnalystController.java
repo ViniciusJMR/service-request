@@ -3,6 +3,7 @@ package dev.viniciusjmr.servicerequest.api.controller;
 import dev.viniciusjmr.servicerequest.api.model.solicitations.AnalystSolicitationResponse;
 import dev.viniciusjmr.servicerequest.api.model.solicitations.SolicitationDecideRequest;
 import dev.viniciusjmr.servicerequest.api.model.solicitations.SolicitationDecideResponse;
+import dev.viniciusjmr.servicerequest.domain.model.Role;
 import dev.viniciusjmr.servicerequest.domain.model.Solicitation;
 import dev.viniciusjmr.servicerequest.domain.service.AnalystService;
 import dev.viniciusjmr.servicerequest.infrastructure.audit.Audit;
@@ -30,7 +31,8 @@ public class AnalystController {
     @GetMapping("/solicitations")
     public ResponseEntity<List<AnalystSolicitationResponse>> getSolicitations(@AuthenticationPrincipal Jwt jwt ) {
         var analystId = UUID.fromString(jwt.getSubject());
-        var solicitations = analystService.getSubmittedSolicitations(analystId);
+        var role = getRole(jwt);
+        var solicitations = analystService.getSubmittedSolicitations(analystId, role);
 
         var solicitationResponse = solicitations.stream().map(AnalystSolicitationResponse::from).toList();
 
@@ -44,8 +46,9 @@ public class AnalystController {
             @PathVariable UUID id
     ) {
         var analystId = UUID.fromString(jwt.getSubject());
+        var role = getRole(jwt);
 
-        var solicitation = analystService.getSubmittedSolicitation(analystId, id);
+        var solicitation = analystService.getSubmittedSolicitation(analystId, role, id);
 
         return ResponseEntity.ok(AnalystSolicitationResponse.from(solicitation));
     }
@@ -56,8 +59,9 @@ public class AnalystController {
             @PathVariable UUID id
     ) {
         var analystId = UUID.fromString(jwt.getSubject());
+        var role = getRole(jwt);
 
-        analystService.startSolicitation(analystId, id);
+        analystService.startSolicitation(analystId, role, id);
 
         return ResponseEntity.status(HttpStatus.OK).build();
     }
@@ -70,11 +74,13 @@ public class AnalystController {
             @RequestBody @Valid SolicitationDecideRequest body
     ) {
         var analystId = UUID.fromString(jwt.getSubject());
+        var role = getRole(jwt);
 
 
         var decision = Objects.equals(body.decision(), "APPROVE") ? Solicitation.Status.APPROVED : Solicitation.Status.REJECTED;
         var solicitation = analystService.decideSolicitation(
                 analystId,
+                role,
                 id,
                 decision,
                 body.comment()
@@ -82,5 +88,9 @@ public class AnalystController {
 
 
         return ResponseEntity.ok(SolicitationDecideResponse.from(solicitation));
+    }
+
+    private Role getRole(Jwt jwt) {
+        return Role.valueOf(jwt.getClaimAsString("role"));
     }
 }

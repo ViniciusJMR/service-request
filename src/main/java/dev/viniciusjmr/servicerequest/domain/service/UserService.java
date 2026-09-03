@@ -1,6 +1,7 @@
 package dev.viniciusjmr.servicerequest.domain.service;
 
 import dev.viniciusjmr.servicerequest.domain.exception.FieldException;
+import dev.viniciusjmr.servicerequest.domain.exception.InvalidOperation;
 import dev.viniciusjmr.servicerequest.domain.exception.ResourceAlreadyExistsException;
 import dev.viniciusjmr.servicerequest.domain.model.Role;
 import dev.viniciusjmr.servicerequest.domain.model.User;
@@ -33,6 +34,10 @@ public class UserService {
             String password,
             Role role
     ) {
+
+        if(userRepository.findByEmail(email).isPresent())
+            throw new ResourceAlreadyExistsException("User with this e-mail already exists");
+
         var user = new User(
                 name,
                 email,
@@ -44,7 +49,9 @@ public class UserService {
         try {
             return userRepository.save(user);
         } catch (DataIntegrityViolationException e) {
-            throw new ResourceAlreadyExistsException("User with this e-mail already exists");
+            throw new InvalidOperation(
+                    String.format("Error saving user: %s", e.getMessage())
+            );
         }
     }
 }

@@ -2,6 +2,7 @@ package dev.viniciusjmr.servicerequest.domain.service;
 
 import dev.viniciusjmr.servicerequest.domain.exception.InvalidOperation;
 import dev.viniciusjmr.servicerequest.domain.exception.ResourceNotFoundException;
+import dev.viniciusjmr.servicerequest.domain.model.Role;
 import dev.viniciusjmr.servicerequest.domain.model.Solicitation;
 import dev.viniciusjmr.servicerequest.domain.repository.AnalystCoverageRepository;
 import dev.viniciusjmr.servicerequest.domain.repository.SolicitationRepository;
@@ -25,26 +26,26 @@ public class AnalystService {
         this.userRepository = userRepository;
     }
 
-    public List<Solicitation> getSubmittedSolicitations( UUID analystId ) {
+    public List<Solicitation> getSubmittedSolicitations(UUID analystId, Role role) {
+        if (role == Role.ADMIN) {
+            return solicitationRepository.findAllByStatus(Solicitation.Status.SUBMITTED);
+        }
+
         return solicitationRepository
                 .findAllByAnalystCoverage(analystId)
                 .stream()
                 .filter(s -> s.getStatus() == Solicitation.Status.SUBMITTED).toList();
     }
 
-    public Solicitation getSubmittedSolicitation(UUID analystId, UUID solicitationId) {
-        // Throwing Not found for security
-        // TODO: Change to validate if user is Admin
-        return solicitationRepository.findByAnalystCoverageAndId(analystId, solicitationId)
-                .orElseThrow(() -> new ResourceNotFoundException("Solicitation not found"));
+    public Solicitation getSubmittedSolicitation(UUID analystId, Role role, UUID solicitationId) {
+        return findSolicitationForAnalysis(analystId, role, solicitationId);
     }
 
-    public void startSolicitation(UUID analystId, UUID solicitationId) {
+    public void startSolicitation(UUID analystId, Role role, UUID solicitationId) {
         var user = userRepository.findById(analystId)
                 .orElseThrow(() -> new ResourceNotFoundException("User not found"));
 
-        var solicitation = solicitationRepository.findByAnalystCoverageAndId(analystId, solicitationId)
-                .orElseThrow(() -> new ResourceNotFoundException("Solicitation not found"));
+        var solicitation = findSolicitationForAnalysis(analystId, role, solicitationId);
 
         if (!solicitation.getStatus().equals(Solicitation.Status.SUBMITTED)) {
             throw new InvalidOperation("Solicitation review can only start when status is Submitted");
@@ -58,6 +59,7 @@ public class AnalystService {
 
     public Solicitation decideSolicitation(
             UUID analystId,
+            Role role,
             UUID solicitationId,
             Solicitation.Status decision,
             String comment
@@ -65,8 +67,7 @@ public class AnalystService {
         var user = userRepository.findById(analystId)
                 .orElseThrow(() -> new ResourceNotFoundException("User not found"));
 
-        var solicitation = solicitationRepository.findByAnalystCoverageAndId(analystId, solicitationId)
-                .orElseThrow(() -> new ResourceNotFoundException("Solicitation not found"));
+        var solicitation = findSolicitationForAnalysis(analystId, role, solicitationId);
 
         var status = solicitation.getStatus();
 
@@ -80,5 +81,15 @@ public class AnalystService {
         solicitation.setAnalyzisComment(comment);
 
         return solicitationRepository.save(solicitation);
+    }
+
+    private Solicitation findSolicitationForAnalysis(UUID analystId, Role role, UUID solicitationId) {
+        if (role == Role.ADMIN) {
+            return solicitationRepository.findById(solicitationId)
+                    .orElseThrow(() -> new ResourceNotFoundException("Solicitation not found"));
+        }
+
+        return solicitationRepository.findByAnalystCoverageAndId(analystId, solicitationId)
+                .orElseThrow(() -> new ResourceNotFoundException("Solicitation not found"));
     }
 }

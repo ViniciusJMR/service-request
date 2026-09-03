@@ -124,6 +124,7 @@ public class User {
         this.createdAt = createdAt;
     }
 
+
     @Override
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;

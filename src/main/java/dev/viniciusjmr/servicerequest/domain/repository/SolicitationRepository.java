@@ -13,6 +13,8 @@ import java.util.UUID;
 @Repository
 public interface SolicitationRepository extends JpaRepository<Solicitation, UUID> {
 
+    List<Solicitation> findAllByStatus(Solicitation.Status status);
+
     @Query("""
             SELECT s
             FROM Solicitation s
