@@ -3,6 +3,8 @@ package dev.viniciusjmr.servicerequest.api.controller;
 import dev.viniciusjmr.servicerequest.api.model.solicitations.CreateSolicitationResponse;
 import dev.viniciusjmr.servicerequest.api.model.solicitations.Step1Request;
 import dev.viniciusjmr.servicerequest.api.model.solicitations.Step1Response;
+import dev.viniciusjmr.servicerequest.api.model.solicitations.Step2Request;
+import dev.viniciusjmr.servicerequest.api.model.solicitations.Step2Response;
 import dev.viniciusjmr.servicerequest.domain.model.Solicitation;
 import dev.viniciusjmr.servicerequest.domain.service.SolicitationService;
 import jakarta.validation.Valid;
@@ -28,7 +30,7 @@ public class SolicitationController {
     public ResponseEntity<CreateSolicitationResponse> createSolicitation(@AuthenticationPrincipal Jwt jwt) {
         var userId = UUID.fromString(jwt.getSubject());
 
-        var request = solicitationService.createBlankRequest(userId);
+        var request = solicitationService.createBlankSolicitation(userId);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(CreateSolicitationResponse.from(request));
     }
@@ -68,6 +70,42 @@ public class SolicitationController {
         );
 
         return ResponseEntity.ok(Step1Response.from(solicitation));
+    }
+
+    @PatchMapping("/{id}/step/2")
+    public ResponseEntity<Step2Response> patchStep2(
+            @AuthenticationPrincipal Jwt jwt,
+            @PathVariable UUID id,
+            @RequestBody Step2Request body
+    ) {
+        var userId = UUID.fromString(jwt.getSubject());
+        var solicitation = solicitationService.saveStep2(
+                userId,
+                id,
+                body.cep(),
+                body.number(),
+                body.complement()
+        );
+
+        return ResponseEntity.ok(Step2Response.from(solicitation));
+    }
+
+    @PostMapping("/{id}/step/2")
+    public ResponseEntity<Step2Response> completeStep2(
+            @AuthenticationPrincipal Jwt jwt,
+            @PathVariable UUID id,
+            @RequestBody @Valid Step2Request body
+    ) {
+        var userId = UUID.fromString(jwt.getSubject());
+        var solicitation = solicitationService.completeStep2(
+                userId,
+                id,
+                body.cep(),
+                body.number(),
+                body.complement()
+        );
+
+        return ResponseEntity.ok(Step2Response.from(solicitation));
     }
 
 }

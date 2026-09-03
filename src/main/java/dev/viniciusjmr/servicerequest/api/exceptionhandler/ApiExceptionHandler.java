@@ -1,10 +1,7 @@
 package dev.viniciusjmr.servicerequest.api.exceptionhandler;
 
 import dev.viniciusjmr.servicerequest.api.model.exception.GlobalExceptionModel;
-import dev.viniciusjmr.servicerequest.domain.exception.FieldException;
-import dev.viniciusjmr.servicerequest.domain.exception.ForbidenOperationException;
-import dev.viniciusjmr.servicerequest.domain.exception.ResourceAlreadyExistsException;
-import dev.viniciusjmr.servicerequest.domain.exception.ResourceNotFoundException;
+import dev.viniciusjmr.servicerequest.domain.exception.*;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
@@ -110,6 +107,40 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
         return handleExceptionInternal(ex, body, new HttpHeaders(), code, request);
     }
 
+    @ExceptionHandler(ExternalServiceUnavailableException.class)
+    public ResponseEntity<Object> handleExternalServiceUnavailableException(
+            ExternalServiceUnavailableException ex,
+            WebRequest request
+    ) {
+        var code = HttpStatus.BAD_GATEWAY;
+
+        var body = new GlobalExceptionModel(
+                ex.getMessage(),
+                code.value(),
+                Instant.now(),
+                null
+        );
+
+        return handleExceptionInternal(ex, body, new HttpHeaders(), code, request);
+    }
+
+    @ExceptionHandler(NotEditableException.class)
+    public ResponseEntity<Object> handleNotEditableException(
+            NotEditableException ex,
+            WebRequest request
+    ) {
+        var code = HttpStatus.CONFLICT;
+
+        var body = new GlobalExceptionModel(
+                ex.getMessage(),
+                code.value(),
+                Instant.now(),
+                null
+        );
+
+        return handleExceptionInternal(ex, body, new HttpHeaders(), code, request);
+    }
+
 
     @Override
     protected ResponseEntity<Object> handleMethodArgumentNotValid(
@@ -132,7 +163,7 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
         var code = HttpStatus.BAD_REQUEST;
 
         var body = new GlobalExceptionModel(
-                ex.getMessage(),
+                "Invalid fields",
                 code.value(),
                 Instant.now(),
                 errors

@@ -40,6 +40,8 @@ public class Solicitation {
 
 
     // Step 2
+    @Embedded
+    private Address address;
 
 
     // Step 3
@@ -136,6 +138,15 @@ public class Solicitation {
     public void setDescription(String description) {
         this.description = description;
     }
+
+    public Address getAddress() {
+        return address;
+    }
+
+    public void setAddress(Address address) {
+        this.address = address;
+    }
+
 
     public Instant getCreatedAt() {
         return createdAt;

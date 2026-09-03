@@ -8,7 +8,8 @@ public record Step1Response(
     UUID id,
     String title,
     String description,
-    Solicitation.ServiceType serviceType
+    Solicitation.ServiceType serviceType,
+    Integer currentStep
 ) {
 
     public static Step1Response from (Solicitation solicitation) {
@@ -16,7 +17,8 @@ public record Step1Response(
                 solicitation.getId(),
                 solicitation.getTitle(),
                 solicitation.getDescription(),
-                solicitation.getType()
+                solicitation.getType(),
+                solicitation.getCurrentStep()
         );
     }
 }
