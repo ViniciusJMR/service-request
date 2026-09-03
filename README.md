@@ -1,5 +1,6 @@
 # Service Solicitation
 
+Solicitação de Serviço MultiEtapa com rascunho e validação para cada etapa
 
 ## Como Rodar
 
@@ -34,6 +35,11 @@ A Collection de endpoints para se usar no Postman pode ser encontrado na pasta [
 ### Migrações
 As migrações estão ocorrendo pelo flyway e estão configuradas para rodar assim que assim que a aplicação for iniciada
 
+### Audit
+Criação de Anotação Audit para mostrar o Log e salvar na tabela `audit_logs`
+
+### IndexSolicitation
+Criação de Anotação IndexSolicitation para componentizar o ato de salvar as solicitações no ElasticSearch 
 
 ## Busca de solicitações para analistas
 
