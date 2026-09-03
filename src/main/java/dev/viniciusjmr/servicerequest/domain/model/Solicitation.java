@@ -1,11 +1,16 @@
 package dev.viniciusjmr.servicerequest.domain.model;
 
+import dev.viniciusjmr.servicerequest.domain.service.validation.ValidationGroups;
 import jakarta.persistence.*;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.*;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+import org.springframework.validation.annotation.Validated;
 
 import java.time.Instant;
+import java.util.Date;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -29,20 +34,44 @@ public class Solicitation {
 
     // Step 1
 
+    @NotNull(
+            message = "Service Type is required",
+            groups = {ValidationGroups.OnCompleteStep1.class, ValidationGroups.OnSubmit.class}
+    )
     @Enumerated(EnumType.STRING)
     private ServiceType type;
 
+    @NotBlank(
+            message = "Title is required",
+            groups = {ValidationGroups.OnCompleteStep1.class, ValidationGroups.OnSubmit.class}
+    )
     @Column(length = 80)
+    @Size(
+            min = 3,
+            max = 80,
+            message = "Title must have between 3 and 80 characters",
+            groups = {ValidationGroups.OnCompleteStep1.class, ValidationGroups.OnSubmit.class}
+    )
     private String title;
 
+    @NotBlank(
+            message = "Description is required",
+            groups = {ValidationGroups.OnCompleteStep1.class, ValidationGroups.OnSubmit.class}
+    )
+    @Size(
+            min = 20,
+            max = 1000,
+            message = "Description must have between 20 and 1000 characters",
+            groups = {ValidationGroups.OnCompleteStep1.class, ValidationGroups.OnSubmit.class}
+    )
     @Column(length = 1000)
     private String description;
 
 
     // Step 2
+    @Valid
     @Embedded
     private Address address;
-
 
     // Step 3
 

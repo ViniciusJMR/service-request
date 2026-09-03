@@ -1,10 +1,6 @@
 package dev.viniciusjmr.servicerequest.api.controller;
 
-import dev.viniciusjmr.servicerequest.api.model.solicitations.CreateSolicitationResponse;
-import dev.viniciusjmr.servicerequest.api.model.solicitations.Step1Request;
-import dev.viniciusjmr.servicerequest.api.model.solicitations.Step1Response;
-import dev.viniciusjmr.servicerequest.api.model.solicitations.Step2Request;
-import dev.viniciusjmr.servicerequest.api.model.solicitations.Step2Response;
+import dev.viniciusjmr.servicerequest.api.model.solicitations.*;
 import dev.viniciusjmr.servicerequest.domain.model.Solicitation;
 import dev.viniciusjmr.servicerequest.domain.service.SolicitationService;
 import jakarta.validation.Valid;
@@ -48,7 +44,8 @@ public class SolicitationController {
                 id,
                 body.title(),
                 body.description(),
-                Solicitation.ServiceType.valueOf(body.serviceType())
+                Solicitation.ServiceType.valueOf(body.serviceType()),
+                false
         );
 
         return ResponseEntity.ok(Step1Response.from(solicitation));
@@ -61,12 +58,13 @@ public class SolicitationController {
             @RequestBody @Valid Step1Request body
     ) {
         var userId = UUID.fromString(jwt.getSubject());
-        var solicitation = solicitationService.completeStep1(
+        var solicitation = solicitationService.saveStep1(
                 userId,
                 id,
                 body.title(),
                 body.description(),
-                Solicitation.ServiceType.valueOf(body.serviceType())
+                Solicitation.ServiceType.valueOf(body.serviceType()),
+                true
         );
 
         return ResponseEntity.ok(Step1Response.from(solicitation));
@@ -84,7 +82,8 @@ public class SolicitationController {
                 id,
                 body.cep(),
                 body.number(),
-                body.complement()
+                body.complement(),
+                false
         );
 
         return ResponseEntity.ok(Step2Response.from(solicitation));
@@ -97,12 +96,13 @@ public class SolicitationController {
             @RequestBody @Valid Step2Request body
     ) {
         var userId = UUID.fromString(jwt.getSubject());
-        var solicitation = solicitationService.completeStep2(
+        var solicitation = solicitationService.saveStep2(
                 userId,
                 id,
                 body.cep(),
                 body.number(),
-                body.complement()
+                body.complement(),
+                true
         );
 
         return ResponseEntity.ok(Step2Response.from(solicitation));
