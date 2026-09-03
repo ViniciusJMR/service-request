@@ -14,6 +14,7 @@ import dev.viniciusjmr.servicerequest.domain.service.validation.ValidationGroups
 import jakarta.validation.Validator;
 import org.springframework.stereotype.Service;
 
+import java.time.Instant;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
@@ -165,6 +166,7 @@ public class SolicitationService {
         validate(solicitation, ValidationGroups.OnSubmit.class);
 
         solicitation.setStatus(Solicitation.Status.SUBMITTED);
+        solicitation.setSubmittedAt(Instant.now());
 
         return solicitationRepository.save(solicitation);
     }

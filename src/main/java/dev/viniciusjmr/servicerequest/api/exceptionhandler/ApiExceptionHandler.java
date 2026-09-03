@@ -171,4 +171,21 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 
         return handleExceptionInternal(ex, body, headers, code, request);
     }
+
+    @ExceptionHandler(InvalidOperation.class)
+    public ResponseEntity<Object> handleInvalidOperation(
+            InvalidOperation ex,
+            WebRequest request
+    ) {
+        var code = HttpStatus.CONFLICT;
+
+        var body = new GlobalExceptionModel(
+                ex.getMessage(),
+                code.value(),
+                Instant.now(),
+                null
+        );
+
+        return handleExceptionInternal(ex, body, new HttpHeaders(), code, request);
+    }
 }
