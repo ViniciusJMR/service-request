@@ -2,9 +2,9 @@ spring:
   application:
     name: ServiceRequest
   profiles:
-    active: ${SPRING_PROFILES_ACTIVE:prod}
+    active: ${SPRING_PROFILES_ACTIVE:dev}
   elasticsearch:
-    uris: ${ELASTIC_SEARCH_URI}
+    uris: ${ELASTIC_SEARCH_URI:localhost:9200}
 
 server:
   servlet:

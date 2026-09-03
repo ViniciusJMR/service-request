@@ -11,15 +11,16 @@ services:
       - DATABASE_PASSWORD=root
       - JWT_ISSUER=service-request
       - JWT_TOKEN_EXPIRATION=3600
-      - SECURITY_JWT_PUBLIC_KEY=file:/app/keys/public.pem
-      - SECURITY_JWT_PRIVATE_KEY=file:/app/keys/private.pem
       - APP_ADMIN_NAME=Admin
       - APP_ADMIN_EMAIL=admin@email.com
       - APP_ADMIN_PASSWORD=123456
+      - ELASTIC_SEARCH_URI=elasticsearch:9200
     volumes:
       - ./src/main/resources/keys:/app/keys:ro
     depends_on:
       db:
+        condition: service_healthy
+      elasticsearch:
         condition: service_healthy
     networks:
       - solicitation-network
@@ -45,9 +46,32 @@ services:
       retries: 10
       start_period: 10s
 
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:9.1.1
+    container_name: solicitation-elasticsearch
+    environment:
+      - discovery.type=single-node
+      - xpack.security.enabled=false
+      - xpack.security.http.ssl.enabled=false
+      - ES_JAVA_OPTS=-Xms512m -Xmx512m
+    ports:
+      - "9200:9200"
+    volumes:
+      - elasticsearch-data:/usr/share/elasticsearch/data
+    networks:
+      - solicitation-network
+    healthcheck:
+      test: [ "CMD-SHELL", "curl -f http://localhost:9200 || exit 1" ]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 20s
+    restart: on-failure
+
 
 volumes:
   postgres-data:
+  elasticsearch-data:
 
 networks:
   solicitation-network:
