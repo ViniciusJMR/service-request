@@ -27,7 +27,7 @@ public class UserService {
         return createUser(name, email, password, Role.CLIENT);
     }
 
-    private User createUser(
+    public User createUser(
             String name,
             String email,
             String password,

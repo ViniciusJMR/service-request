@@ -50,15 +50,4 @@ public class State {
         this.name = name;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (o == null || getClass() != o.getClass()) return false;
-        State state = (State) o;
-        return Objects.equals(id, state.id) && Objects.equals(code, state.code) && Objects.equals(name, state.name);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id, code, name);
-    }
 }

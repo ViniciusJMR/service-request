@@ -26,4 +26,21 @@ public class AnalystCoverage {
             inverseJoinColumns = @JoinColumn(name = "state_id")
     )
     private Set<State> states;
+
+    public AnalystCoverage(User user, Set<State> states) {
+        this.user = user;
+        this.states = states;
+    }
+
+    public UUID getUserId() {
+        return userId;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public Set<State> getStates() {
+        return states;
+    }
 }
