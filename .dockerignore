@@ -1,0 +1,15 @@
+.git
+.gitignore
+README.md
+.dockerignore
+target/
+*.log
+*.md
+.idea/
+.settings/
+.project
+.classpath
+.vscode/
+node_modules/
+Dockerfile*
+docker-compose*.yml

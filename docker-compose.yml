@@ -1,0 +1,54 @@
+services:
+  app:
+    build: .
+    container_name: solicitation-app
+    ports:
+      - "8080:8080"
+    environment:
+      - SPRING_PROFILES_ACTIVE=prod
+      - DATABASE_URL=jdbc:postgresql://db:5432/solicitation
+      - DATABASE_USERNAME=postgres
+      - DATABASE_PASSWORD=root
+      - JWT_ISSUER=service-request
+      - JWT_TOKEN_EXPIRATION=3600
+      - SECURITY_JWT_PUBLIC_KEY=file:/app/keys/public.pem
+      - SECURITY_JWT_PRIVATE_KEY=file:/app/keys/private.pem
+      - APP_ADMIN_NAME=Admin
+      - APP_ADMIN_EMAIL=admin@email.com
+      - APP_ADMIN_PASSWORD=123456
+    volumes:
+      - ./src/main/resources/keys:/app/keys:ro
+    depends_on:
+      db:
+        condition: service_healthy
+    networks:
+      - solicitation-network
+    restart: on-failure
+
+  db:
+    image: postgres:17-alpine
+    container_name: solicitation-postgres
+    environment:
+      POSTGRES_DB: solicitation
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: root
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    networks:
+      - solicitation-network
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U postgres -d solicitation" ]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+      start_period: 10s
+
+
+volumes:
+  postgres-data:
+
+networks:
+  solicitation-network:
+    driver: bridge
