@@ -10,6 +10,9 @@ import dev.viniciusjmr.servicerequest.domain.model.Role;
 import dev.viniciusjmr.servicerequest.domain.model.Solicitation;
 import dev.viniciusjmr.servicerequest.domain.service.AnalystService;
 import dev.viniciusjmr.servicerequest.infrastructure.audit.Audit;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,6 +27,10 @@ import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 
+@Tag(
+        name = "Solicitacoes - Analise",
+        description = "Busca e analise de solicitacoes por ANALYST ou ADMIN"
+)
 @RestController
 @RequestMapping("/analyst")
 public class AnalystController {
@@ -34,8 +41,14 @@ public class AnalystController {
         this.analystService = analystService;
     }
 
+    @Operation(
+            summary = "Listar solicitacoes submetidas",
+            description = "Lista solicitacoes com status SUBMITTED disponiveis para o usuario autenticado. ANALYST ve apenas solicitacoes dos estados do seu coverage; ADMIN pode visualizar todas."
+    )
     @GetMapping("/solicitations")
-    public ResponseEntity<List<AnalystSolicitationResponse>> getSolicitations(@AuthenticationPrincipal Jwt jwt ) {
+    public ResponseEntity<List<AnalystSolicitationResponse>> getSolicitations(
+            @Parameter(hidden = true) @AuthenticationPrincipal Jwt jwt
+    ) {
         var analystId = UUID.fromString(jwt.getSubject());
         var role = getRole(jwt);
         var solicitations = analystService.getSubmittedSolicitations(analystId, role);
@@ -46,9 +59,19 @@ public class AnalystController {
 
     }
 
+    @Operation(
+            summary = "Buscar solicitacoes",
+            description = """
+                    Busca solicitacoes no Elasticsearch com filtros opcionais por texto, status, tipo de servico, prioridade, estado, periodo, pagina e ordenacao.
+                    O parametro status deve ser enviado como CSV, por exemplo: SUBMITTED,IN_REVIEW.
+                    dateFrom e dateTo filtram createdAt usando datas no formato yyyy-MM-dd.
+                    Para ANALYST, o parametro state e ignorado e substituido pelos estados configurados no coverage.
+                    Para ADMIN, state e opcional e pode filtrar qualquer estado.
+                    """
+    )
     @GetMapping("/solicitations/search")
     public ResponseEntity<SearchPageResponse<SolicitationSearchResponse>> searchSolicitations(
-            @AuthenticationPrincipal Jwt jwt,
+            @Parameter(hidden = true) @AuthenticationPrincipal Jwt jwt,
             @RequestParam(required = false) String q,
             @RequestParam(required = false) String status,
             @RequestParam(required = false) Solicitation.ServiceType serviceType,
@@ -89,9 +112,13 @@ public class AnalystController {
         ));
     }
 
+    @Operation(
+            summary = "Buscar solicitacao para analise",
+            description = "Retorna uma solicitacao especifica disponivel para analise. ANALYST deve ter coverage do estado da solicitacao; ADMIN pode acessar qualquer solicitacao."
+    )
     @GetMapping("/solicitations/{id}")
     public ResponseEntity<AnalystSolicitationResponse> getSolicitation(
-            @AuthenticationPrincipal Jwt jwt,
+            @Parameter(hidden = true) @AuthenticationPrincipal Jwt jwt,
             @PathVariable UUID id
     ) {
         var analystId = UUID.fromString(jwt.getSubject());
@@ -102,9 +129,13 @@ public class AnalystController {
         return ResponseEntity.ok(AnalystSolicitationResponse.from(solicitation));
     }
 
+    @Operation(
+            summary = "Iniciar analise",
+            description = "Altera uma solicitacao SUBMITTED para IN_REVIEW, marcando o inicio da analise."
+    )
     @PostMapping("/solicitations/{id}/start")
     public ResponseEntity<?> startSolicitation(
-            @AuthenticationPrincipal Jwt jwt,
+            @Parameter(hidden = true) @AuthenticationPrincipal Jwt jwt,
             @PathVariable UUID id
     ) {
         var analystId = UUID.fromString(jwt.getSubject());
@@ -116,9 +147,13 @@ public class AnalystController {
     }
 
     @Audit(action = "SOLICITATION_DECIDE")
+    @Operation(
+            summary = "Decidir solicitacao",
+            description = "Registra a decisao final da analise. A decisao deve ser APPROVE ou REJECT."
+    )
     @PostMapping("/solicitations/{id}/decide")
     public ResponseEntity<SolicitationDecideResponse> decideSolicitation(
-            @AuthenticationPrincipal Jwt jwt,
+            @Parameter(hidden = true) @AuthenticationPrincipal Jwt jwt,
             @PathVariable UUID id,
             @RequestBody @Valid SolicitationDecideRequest body
     ) {
