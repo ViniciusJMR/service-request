@@ -1,0 +1,800 @@
+{
+  "info": {
+    "_postman_id": "cd2d545f-1396-4b6a-8efd-9b1eb952a9ae",
+    "name": "Service Request",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "12695987"
+  },
+  "item": [
+    {
+      "name": "Client",
+      "item": [
+        {
+          "name": "Register",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"name\": \"joao\",\n    \"email\": \"email2@email.com\",\n    \"password\": 123\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "localhost:8080/api/auth/register",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "auth",
+                "register"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Login",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"email\": \"admin@email.com\",\n    \"password\": 123456\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "localhost:8080/api/auth/login",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "auth",
+                "login"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Me",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": ""
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Solicitation",
+      "item": [
+        {
+          "name": "Create Solicitation",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "localhost:8080/api/solicitations",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "solicitations"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Save Step 1 Draft",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "PATCH",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"title\": \"Instalação de Cabo\",\n    \"description\": \"Necessito de instalação\",\n    \"serviceType\": \"INSTALATION\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "localhost:8080/api/solicitations/{{solicitationId}}/step/1",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "solicitations",
+                "{{solicitationId}}",
+                "step",
+                "1"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Save Step 1 Complete",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"title\": \"Manutenção de telefoFIOne\",\n    \"description\": \"Necessito de MANUTENÇÃO\",\n    \"serviceType\": \"MAINTENANCE\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "localhost:8080/api/solicitations/{{solicitationId}}/step/1",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "solicitations",
+                "{{solicitationId}}",
+                "step",
+                "1"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Save Step 2 Draft",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "PATCH",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"cep\": \"72220073\",\n  \"number\": \"23\",\n  \"complement\": \"string\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "localhost:8080/api/solicitations/{{solicitationId}}/step/2",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "solicitations",
+                "{{solicitationId}}",
+                "step",
+                "2"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Save Step 2 Complete",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"cep\": \"01025020\",\n  \"number\": \"101\",\n  \"complement\": \"string\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "localhost:8080/api/solicitations/{{solicitationId}}/step/2",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "solicitations",
+                "{{solicitationId}}",
+                "step",
+                "2"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Save Step 3 Draft",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "PATCH",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"priority\": \"HIGH\",\n  \"preferredDate\": \"2026-09-05\",\n  \"estimatedValue\": 100,\n  \"termsAccepted\": true\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "localhost:8080/api/solicitations/{{solicitationId}}/step/3",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "solicitations",
+                "{{solicitationId}}",
+                "step",
+                "3"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Save Step 3 Complete",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"priority\": \"HIGH\",\n  \"preferredDate\": \"2026-09-05\",\n  \"estimatedValue\": 100,\n  \"termsAccepted\": true\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "localhost:8080/api/solicitations/{{solicitationId}}/step/3",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "solicitations",
+                "{{solicitationId}}",
+                "step",
+                "3"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Submit",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "localhost:8080/api/solicitations/{{solicitationId}}/submit",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "solicitations",
+                "{{solicitationId}}",
+                "submit"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Admin",
+      "item": [
+        {
+          "name": "Create User",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Joao\",\n  \"email\": \"analyst@email.com\",\n  \"password\": \"123\",\n  \"role\": \"ANALYST\",\n  \"states\": [\"DF\"]    \n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "localhost:8080/api/admin/users",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "admin",
+                "users"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Analyst",
+      "item": [
+        {
+          "name": "Analyze Start",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"name\": \"joao\",\n    \"email\": \"email@email.com\",\n    \"password\": 123\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "localhost:8080/api/analyst/solicitations/{{solicitationId}}/start",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "analyst",
+                "solicitations",
+                "{{solicitationId}}",
+                "start"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Analyze Decide",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"decision\": \"APPROVE\",\n    \"comment\": \"Dado as circuntâncias está aprovado\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "localhost:8080/api/analyst/solicitations/{{solicitationId}}/decide",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "analyst",
+                "solicitations",
+                "{{solicitationId}}",
+                "decide"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Solicitation",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"name\": \"joao\",\n    \"email\": \"email@email.com\",\n    \"password\": 123\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "localhost:8080/api/analyst/solicitations/{{solicitationId}}",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "analyst",
+                "solicitations",
+                "{{solicitationId}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Search",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "localhost:8080/api/analyst/solicitations/search?q=",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "analyst",
+                "solicitations",
+                "search"
+              ],
+              "query": [
+                {
+                  "key": "q",
+                  "value": "",
+                  "description": "Busca o texto em Title ou Description\n"
+                },
+                {
+                  "key": "status",
+                  "value": "APPROVED,SUBMITTED",
+                  "description": "1 ou vários",
+                  "disabled": true
+                },
+                {
+                  "key": "serviceType",
+                  "value": "INSTALLATION",
+                  "disabled": true
+                },
+                {
+                  "key": "priority",
+                  "value": "LOW",
+                  "disabled": true
+                },
+                {
+                  "key": "state",
+                  "value": "",
+                  "disabled": true
+                },
+                {
+                  "key": "page",
+                  "value": "",
+                  "disabled": true
+                },
+                {
+                  "key": "size",
+                  "value": "",
+                  "disabled": true
+                },
+                {
+                  "key": "dateFrom",
+                  "value": "2026-09-03",
+                  "disabled": true
+                },
+                {
+                  "key": "dateTo",
+                  "value": "2026-09-04",
+                  "disabled": true
+                },
+                {
+                  "key": "sort",
+                  "value": "ASC",
+                  "disabled": true
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "Search",
+              "originalRequest": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "localhost:8080/api/analyst/solicitations/search?dateFrom=2026-09-03&dateTo=2026-09-04",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8080",
+                  "path": [
+                    "api",
+                    "analyst",
+                    "solicitations",
+                    "search"
+                  ],
+                  "query": [
+                    {
+                      "key": "q",
+                      "value": null,
+                      "description": "Busca o texto em Title ou Description\n",
+                      "disabled": true
+                    },
+                    {
+                      "key": "status",
+                      "value": null,
+                      "description": "1 ou vários",
+                      "disabled": true
+                    },
+                    {
+                      "key": "serviceType",
+                      "value": null,
+                      "disabled": true
+                    },
+                    {
+                      "key": "priority",
+                      "value": null,
+                      "disabled": true
+                    },
+                    {
+                      "key": "state",
+                      "value": null,
+                      "disabled": true
+                    },
+                    {
+                      "key": "page",
+                      "value": null,
+                      "disabled": true
+                    },
+                    {
+                      "key": "size",
+                      "value": null,
+                      "disabled": true
+                    },
+                    {
+                      "key": "sort",
+                      "value": null,
+                      "disabled": true
+                    },
+                    {
+                      "key": "dateFrom",
+                      "value": "2026-09-03"
+                    },
+                    {
+                      "key": "dateTo",
+                      "value": "2026-09-04"
+                    }
+                  ]
+                }
+              },
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "x-content-type-options",
+                  "value": "nosniff"
+                },
+                {
+                  "key": "x-xss-protection",
+                  "value": "0"
+                },
+                {
+                  "key": "cache-control",
+                  "value": "no-cache, no-store, max-age=0, must-revalidate"
+                },
+                {
+                  "key": "pragma",
+                  "value": "no-cache"
+                },
+                {
+                  "key": "expires",
+                  "value": "0"
+                },
+                {
+                  "key": "x-frame-options",
+                  "value": "SAMEORIGIN"
+                },
+                {
+                  "key": "content-type",
+                  "value": "application/json"
+                },
+                {
+                  "key": "transfer-encoding",
+                  "value": "chunked"
+                },
+                {
+                  "key": "date",
+                  "value": "Thu, 03 Sep 2026 20:48:37 GMT"
+                },
+                {
+                  "key": "connection",
+                  "value": "close"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"timestamp\": \"2026-09-03T20:48:37.824Z\",\n  \"status\": 500,\n  \"error\": \"Internal Server Error\",\n  \"path\": \"/api/analyst/solicitations/search\"\n}"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "variable": [
+    {
+      "key": "supabase_service_role_api_key_0b2k",
+      "secret": true
+    },
+    {
+      "key": "token",
+      "value": ""
+    },
+    {
+      "key": "solicitationId",
+      "value": ""
+    }
+  ]
+}
