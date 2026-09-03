@@ -2,6 +2,9 @@
 
 Solicitação de Serviço MultiEtapa com rascunho e validação para cada etapa
 
+## OpenAPI Swagger
+O projeto possui os endpoints documentados através do Swagger. Podendo ser acessados no caminho `/api/swagger-ui/index.html`
+
 ## Como Rodar
 
 ###  1. Gerar chaves JWT
