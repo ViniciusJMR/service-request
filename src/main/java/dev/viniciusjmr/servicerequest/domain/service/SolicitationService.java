@@ -114,6 +114,59 @@ public class SolicitationService {
         return solicitationRepository.save(solicitation);
     }
 
+    public Solicitation saveStep3(
+            UUID userId,
+            UUID solicitationId,
+            Solicitation.Priority priority,
+            Date preferredDate,
+            Double estimatedValue,
+            Boolean termsAccepted,
+            boolean validate
+    ) {
+        var solicitation = solicitationRepository.findById(solicitationId)
+                .orElseThrow(() -> new ResourceNotFoundException("Solicitation not found"));
+
+        generalValidator.validate(solicitation, userId, 3);
+
+        solicitation.setPriority(priority);
+        solicitation.setPreferredDate(preferredDate);
+        solicitation.setEstimatedValue(estimatedValue);
+        solicitation.setTermsAccepted(termsAccepted);
+
+        if (validate){
+            validate(solicitation, ValidationGroups.OnCompleteStep3.class);
+        }
+
+        if (solicitation.getPriority() == Solicitation.Priority.HIGH && solicitation.getEstimatedValue() < 100) {
+            throw new FieldException(
+                    "Invalid Fields",
+                    List.of(
+                            new FieldException.Field(
+                            "estimatedValue",
+                            "For High priorities estimated value can not be less then 100"
+                            )
+                    )
+            );
+        }
+
+        return solicitationRepository.save(solicitation);
+    }
+
+
+    private void validate(Object object, Class<?> group) {
+        var violations = validator.validate(object, group);
+
+        if (!violations.isEmpty()) {
+            var errors = violations.stream().map(m ->
+                    new FieldException.Field(
+                            m.getPropertyPath().toString(),
+                            m.getMessage()
+                    )
+            ).toList();
+            throw new FieldException("Invalid Fields", errors);
+        }
+    }
+
     private Address buildAddress(
             CEPModel cepModel,
             String normalizedCep,

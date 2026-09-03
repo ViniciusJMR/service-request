@@ -76,6 +76,44 @@ public class Solicitation {
     // Step 3
 
 
+    @NotNull(
+            message = "Priority is required",
+            groups = {ValidationGroups.OnCompleteStep3.class, ValidationGroups.OnSubmit.class}
+    )
+    @Enumerated(EnumType.STRING)
+    private Priority priority;
+
+    @NotNull(
+            message = "Preferred Date is required",
+            groups = {ValidationGroups.OnCompleteStep3.class, ValidationGroups.OnSubmit.class}
+    )
+    @FutureOrPresent(
+            message = "Preferred date must be today or a future date",
+            groups = {ValidationGroups.OnCompleteStep3.class, ValidationGroups.OnSubmit.class}
+    )
+    private Date preferredDate;
+
+    @NotNull(
+            message = "Estimated Value is required",
+            groups = {ValidationGroups.OnCompleteStep3.class, ValidationGroups.OnSubmit.class}
+    )
+    @Positive(
+            message = "Estimated Value must be greater than 0",
+            groups = {ValidationGroups.OnCompleteStep3.class, ValidationGroups.OnSubmit.class}
+    )
+    private Double estimatedValue;
+
+    @NotNull(
+            message = "Client must accept the terms to submit",
+            groups = {ValidationGroups.OnCompleteStep3.class, ValidationGroups.OnSubmit.class}
+    )
+    @AssertTrue(
+            message = "Client must accept the terms to submit",
+            groups = {ValidationGroups.OnCompleteStep3.class, ValidationGroups.OnSubmit.class}
+    )
+    private Boolean termsAccepted;
+
+
     // Audit
     @CreatedDate
     private Instant createdAt;
@@ -176,6 +214,39 @@ public class Solicitation {
         this.address = address;
     }
 
+    public Priority getPriority() {
+        return priority;
+    }
+
+    public void setPriority(Priority priority) {
+        this.priority = priority;
+    }
+
+    public Date getPreferredDate() {
+        return preferredDate;
+    }
+
+    public void setPreferredDate(Date preferredDate) {
+        this.preferredDate = preferredDate;
+    }
+
+    public Double getEstimatedValue() {
+        return estimatedValue;
+    }
+
+    public void setEstimatedValue(Double estimatedValue) {
+        this.estimatedValue = estimatedValue;
+    }
+
+    public Boolean getTermsAccepted() {
+        return termsAccepted;
+    }
+
+    public void setTermsAccepted(Boolean termsAccepted) {
+        this.termsAccepted = termsAccepted;
+    }
+
+
 
     public Instant getCreatedAt() {
         return createdAt;
@@ -243,5 +314,11 @@ public class Solicitation {
         INSTALLATION,
         MAINTENANCE,
         INSPECTION
+    }
+
+    public enum Priority {
+        LOW,
+        MEDIUM,
+        HIGH
     }
 }

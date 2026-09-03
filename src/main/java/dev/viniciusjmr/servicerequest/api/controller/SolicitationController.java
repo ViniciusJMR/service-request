@@ -108,4 +108,43 @@ public class SolicitationController {
         return ResponseEntity.ok(Step2Response.from(solicitation));
     }
 
+    @PatchMapping("/{id}/step/3")
+    public ResponseEntity<Step3Response> saveStep3(
+            @AuthenticationPrincipal Jwt jwt,
+            @PathVariable UUID id,
+            @RequestBody @Valid Step3Request body
+    ) {
+        var userId = UUID.fromString(jwt.getSubject());
+        var solicitation = solicitationService.saveStep3(
+                userId,
+                id,
+                Solicitation.Priority.valueOf(body.priority()),
+                body.preferredDate(),
+                body.estimatedValue(),
+                body.termsAccepted(),
+                false
+        );
+
+        return ResponseEntity.ok(Step3Response.from(solicitation));
+    }
+
+    @PostMapping("/{id}/step/3")
+    public ResponseEntity<Step3Response> completeStep3(
+            @AuthenticationPrincipal Jwt jwt,
+            @PathVariable UUID id,
+            @RequestBody @Valid Step3Request body
+    ) {
+        var userId = UUID.fromString(jwt.getSubject());
+        var solicitation = solicitationService.saveStep3(
+                userId,
+                id,
+                Solicitation.Priority.valueOf(body.priority()),
+                body.preferredDate(),
+                body.estimatedValue(),
+                body.termsAccepted(),
+                true
+        );
+
+        return ResponseEntity.ok(Step3Response.from(solicitation));
+    }
 }
